@@ -5,6 +5,7 @@ export interface QueryResult {
   executionTimeMs: number;
   rowCount: number;
   error: string | null;
+  plan?: string;
 }
 
 export class QueryPerformanceAnalyzer {
@@ -20,7 +21,20 @@ export class QueryPerformanceAnalyzer {
       const start = process.hrtime.bigint();
       let rowCount = 0;
       let error: string | null = null;
+      let plan: string | undefined = undefined;
       try {
+        // Get query plan
+        const planResult = await this.db.raw(`EXPLAIN ${query}`);
+        if (Array.isArray(planResult.rows)) {
+          plan = planResult.rows
+            .map((row: any) => row["QUERY PLAN"] || Object.values(row)[0])
+            .join("\n");
+        } else if (Array.isArray(planResult)) {
+          plan = planResult
+            .map((row: any) => row["QUERY PLAN"] || Object.values(row)[0])
+            .join("\n");
+        }
+        // Run the actual query
         const result = await this.db.raw(query);
         if (Array.isArray(result.rows)) {
           rowCount = result.rows.length;
@@ -36,6 +50,7 @@ export class QueryPerformanceAnalyzer {
         executionTimeMs: Number(end - start) / 1e6,
         rowCount,
         error,
+        plan,
       });
     }
     return results;

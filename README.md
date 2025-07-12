@@ -1,12 +1,13 @@
 # Query Performance Analyzer
 
-A Node.js tool to analyze SQL query performance using Knex and PostgreSQL. It runs a list of queries, measures execution time, and reports basic metrics such as row count and errors.
+A Node.js tool to analyze SQL query performance using Knex and PostgreSQL. It runs a list of queries, measures execution time, reports basic metrics such as row count and errors, and now also displays the PostgreSQL query plan for each query.
 
 ## Features
 
 - Runs multiple SQL queries against a PostgreSQL database
 - Measures execution time for each query
 - Reports row count and errors (if any)
+- Shows the PostgreSQL query plan (using EXPLAIN)
 - Written in TypeScript, using Knex.js
 
 ## Requirements
@@ -38,23 +39,23 @@ A Node.js tool to analyze SQL query performance using Knex and PostgreSQL. It ru
 5. **Build the project:**
 
    ```bash
-   npx tsc
+   npm run build
    ```
 
 6. **Run the analyzer:**
    ```bash
-   node dist/index.js
+   npm start
    ```
 
 ## Example Output
 
 ```
-┌─────────┬─────────────────────────────────────────────┬─────────────────┬──────────┬───────┐
-│ (index) │ query                                       │ executionTimeMs │ rowCount │ error │
-├─────────┼─────────────────────────────────────────────┼─────────────────┼──────────┼───────┤
-│ 0       │ 'SELECT NOW();'                             │ 11.5608         │ 0        │ ''    │
-│ 1       │ 'SELECT * FROM information_schema.tables ... │ 0.9985          │ 0        │ ''    │
-└─────────┴─────────────────────────────────────────────┴─────────────────┴──────────┴───────┘
+┌─────────┬─────────────────────────────────────────────┬─────────────────┬──────────┬───────┬─────────────────────────────┐
+│ (index) │ query                                       │ executionTimeMs │ rowCount │ error │ plan                        │
+├─────────┼─────────────────────────────────────────────┼─────────────────┼──────────┼───────┼─────────────────────────────┤
+│ 0       │ 'SELECT NOW();'                             │ 11.5608         │ 0        │ ''    │ 'Result  (cost=0.00..0.01…' │
+│ 1       │ 'SELECT * FROM information_schema.tables ... │ 0.9985          │ 0        │ ''    │ 'Limit  (cost=0.00..0.01…'  │
+└─────────┴─────────────────────────────────────────────┴─────────────────┴──────────┴───────┴─────────────────────────────┘
 ```
 
 ## License
