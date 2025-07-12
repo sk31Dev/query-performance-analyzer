@@ -1,0 +1,18 @@
+{
+  "name": "query-performance-analyzer",
+  "version": "1.0.0",
+  "description": "A Node.js tool to analyze SQL query performance using Knex and PostgreSQL.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "knex": "^3.0.0",
+    "pg": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.13",
+    "typescript": "^5.8.3"
+  }
+}
